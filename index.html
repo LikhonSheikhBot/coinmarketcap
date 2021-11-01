@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - coinmarketcap top searched dashboard example 🚀</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
+<link rel='stylesheet' href='https://unpkg.com/vuetify/dist/vuetify.min.css'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Material+Icons'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="app">
+  <v-app dark id="coins">
+    <v-main dark>
+      <v-app-bar dark color="#212121">
+        <v-row>
+          <v-col class="pt-8">
+            <v-btn icon tile id="cubes">
+              <v-icon large color="yellow darken-3">mdi-rocket</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col class="mt-6">
+            <v-autocomplete outlined flat solo :items="searchItems" @keydown="handleSearch" dense></v-autocomplete>
+          </v-col>
+        </v-row>
+      </v-app-bar>
+      <div>
+        <v-container fluid>
+          <template v-for="(itemGroup,index) in chunkItems(items)">
+            <v-row>
+              <template v-for="item in itemGroup">
+                <v-col>
+                  <v-card :key="item.id" dark>
+                    <v-card-title>{{item.name}} </v-card-title>
+                    <v-card-text>
+                      <v-simple-table>
+                        <template v-slot:default>
+                          <tbody>
+                            <tr>
+                              <td>Symbol</td>
+                              <td>{{item.symbol}}</td>
+                            </tr>
+                            <tr>
+                              <td>Price</td>
+                              <td v-if="item.priceChange.price > 0">{{item.priceChange.price |toCurrency}}</td>
+                              <td v-else=>No Data</td>
+                            </tr>
+                            <tr>
+                              <td>Rank</td>
+                              <td>#{{item.rank}}</td>
+                            </tr>
+                            <tr>
+                              <td>MarketCap</td>
+                              <td>{{item.marketCap |toCurrency }}</td>
+                            </tr>
+                            <tr>
+                              <td>PriceChange 24hr</td>
+                              <td>
+                                <v-chip v-if="item.priceChange.priceChange24h > 0" label color="green">{{item.priceChange.priceChange24h|toPercent}}</v-chip>
+                                <v-chip v-else-if="item.priceChange.priceChange24h === 0" label color="grey">{{item.priceChange.priceChange24h|toPercent}}</v-chip>
+                                <v-chip v-else label color="red">{{item.priceChange.priceChange24h|toPercent}}</v-chip>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </template>
+            </v-row>
+          </template>
+        </v-container>
+      </div>
+    </v-main>
+  </v-app>
+</div>
+<!-- partial -->
+  <script src='https://unpkg.com/vue/dist/vue.js'></script>
+<script src='https://unpkg.com/vuetify/dist/vuetify.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
